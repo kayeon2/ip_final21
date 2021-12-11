@@ -8,7 +8,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Shop Item - Start Bootstrap Template</title>
-        <link href="{% static 'blog/bootstrap/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="screen">
+        <link href="{% static 'mall/bootstrap/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="screen">
         <script src="https://kit.fontawesome.com/53107d7124.js" crossorigin="anonymous"></script>
 
         <!-- Favicon-->
@@ -53,7 +53,7 @@
         <section class="py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." /></div>
+                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ item.head_image.url }}" alt="..." /></div>
                     <div class="col-md-6">
                         <div class="small mb-1">SKU: BST-498</div>
                         <h1 class="display-5 fw-bolder">{{ item.title }}</h1>
