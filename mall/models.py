@@ -13,12 +13,10 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    brand = models.ForeignKey(User, on_delete=models.CASCADE)
+    brand = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'[{self.pk}]{self.title} :: {self.brand}'
 
     def get_absolute_url(self):
         return f'/mall/{self.pk}/'
-
-# Create your models here.
