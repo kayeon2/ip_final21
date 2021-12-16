@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Item, Category, Tag
+from django.core.exceptions import PermissionDenied
 
 class ItemList(ListView):
     model = Item
@@ -36,6 +37,18 @@ class ItemCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             return super(ItemCreate, self).form_valid(form)
         else:
             return redirect('/mall/')
+
+class ItemUpdate(LoginRequiredMixin, UpdateView):
+    model = Item
+    fields = ['title', 'hook_text', 'content', 'price', 'head_image', 'category', 'tags']
+
+    template_name = 'mall/item_update_form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(ItemUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
 
 def category_page(request, slug):
     if slug == 'no_category':

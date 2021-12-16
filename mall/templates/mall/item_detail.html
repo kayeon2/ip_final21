@@ -11,14 +11,20 @@
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center">
                     <div class="col-md-6">
-                        <img class="card-img-top mb-5 mb-md-0" src="{{ item.head_image.url }}" alt="..." />
+                        {% if item.head_image %}
+                            <img class="card-img-top mb-5 mb-md-0" src="{{ item.head_image.url }}" alt="..." />
+                        {% else %}
+                            <img class="img-fluid rounded" src="https://picsum.photos/seed/{{post.id}}/800/200" alt="random image" />
+                        {% endif %}
                     </div>
+
                     <div class="col-md-6">
                         {% if item.category %}
                         <span class="badge bg-secondary float-right">{{ item.category }}</span>
                         {% else %}
                         <span class="badge bg-secondary float-right">미분류</span>
                         {% endif %}
+
                         <a href="#"><h3>{{ item.author }}</h3></a>
                         <div class="small mb-1">SKU: BST-498</div>
                         <h1 class="display-5 fw-bolder">{{ item.title }}</h1>
@@ -26,6 +32,7 @@
                             <span class="text-decoration-line-through">{{ item.price }}</span>
                         </div>
                         <p class="lead">{{ item.content }}</p>
+
                         {% if item.tags.exists %}
                             <i class="fas fa-tags"></i>
                             {% for tag in item.tags.all %}
@@ -33,6 +40,13 @@
                             {% endfor %}
                             <br/><br/>
                         {% endif %}
+
+                        {% if user.is_authenticated and user == item.author %}
+                            <a href="/mall/update_item/{{item.pk}}/" class="btn btn-info htn-sm float-right">
+                                <i class="fas fa-pen"></i> Edit Item
+                            </a>
+                        {% endif %}
+
                         <div class="d-flex">
                             <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
                             <button class="btn btn-outline-dark flex-shrink-0" type="button">
