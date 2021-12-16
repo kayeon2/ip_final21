@@ -27,6 +27,14 @@
                                 <!-- Product price-->
                                 {{ i.price }}
                             </div>
+
+                            {% if i.tags.exists %}
+                                <i class="fas fa-tags"></i>
+                                {% for tag in i.tags.all %}
+                                    <a href="{{ tag.get_absolute_url }}"><span class="badge bg-light">{{ tag }}</span></a>
+                                {% endfor %}
+                                <br/><br/>
+                            {% endif %}
                         </div>
                         <!-- Product actions-->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
