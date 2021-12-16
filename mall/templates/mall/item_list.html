@@ -1,6 +1,7 @@
 {% extends 'mall/base.html' %}
 
 {% block main_area %}
+    {% include 'mall/header.html' %}
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-2 row-cols-xl-3 justify-content-center">
         {% if item_list.exists %}
             {% for i in item_list %}
@@ -11,6 +12,8 @@
                         <!-- Product details-->
                         <div class="card-body p-4">
                             <div class="text-center">
+                                <!-- Product brand-->
+                                <a href="#">{{ i.author }}</a>
                                 <!-- Product name-->
                                 <h5 class="fw-bolder">{{ i.title }}</h5>
                                 <!-- Product price-->
