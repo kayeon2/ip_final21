@@ -17,10 +17,10 @@ class TestView(TestCase):
         logo_btn = navbar.find('a', text='Navbar')
         self.assertEqual(logo_btn.attrs['href'], '/')
 
-        home_btn = navbar.find('a', text='Home')
+        home_btn = navbar.find('a', text=' Home')
         # self.assertEqual(home_btn.attrs['href'], '/')
 
-        mall_btn = navbar.find('a', text='Shop')
+        mall_btn = navbar.find('a', text=' Shop')
         # self.assertEqual(mall_btn.attrs['href'], '/mall/')
 
         about_me_btn = navbar.find('a', text='About Us')
@@ -51,13 +51,20 @@ class TestView(TestCase):
         self.assertEqual(Item.objects.count(), 2)
 
         response = self.client.get('/mall/')
-        # soup = BeautifulSoup(response.content, 'html.parser')
-        # #
-        # self.assertEqual(response.status_code, 200)
-        # main_area = soup.find('div', id='main-area')
-        #
-        # self.assertIn(item_001.title, main_area.text)
-        # self.assertIn(item_002.title, main_area.text)
-        #
-        # self.assertNotIn('아직 상품이 없습니다.', main_area.text)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        self.assertEqual(response.status_code, 200)
+        main_area = soup.find('div', id='main-area')
+
+        self.assertIn(item_001.title, main_area.text)
+        self.assertIn(item_002.title, main_area.text)
+
+        self.assertNotIn('아직 상품이 없습니다.', main_area.text)
+
+    # def test_update_item(self):
+        # update_item_url = f'/mall/update_post/{self.item_002.pk}/'
+
+        # 로그인하지 않은 경우
+        # response = self.client.get(update_item_url)
+        # self.assertNotEqual(response.status_code, 200)
 
