@@ -6,11 +6,17 @@
         {% if item_list.exists %}
             {% for i in item_list %}
                 <div class="col mb-5">
-                    <div class="card h-100">
+                    <div class="card h-100" id="item-{{ i.pk }}">
                         <!-- Product image-->
                         <img class="card-img-top" src="{{ i.head_image.url }}" alt="{{ i }} head image" />
                         <!-- Product details-->
                         <div class="card-body p-4">
+                            {% if i.category %}
+                            <span class="badge bg-secondary float-right">{{ i.category }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary float-right">미분류</span>
+                            {% endif %}
+
                             <div class="text-center">
                                 <!-- Product brand-->
                                 <a href="#">{{ i.author }}</a>

@@ -14,6 +14,11 @@
                         <img class="card-img-top mb-5 mb-md-0" src="{{ item.head_image.url }}" alt="..." />
                     </div>
                     <div class="col-md-6">
+                        {% if item.category %}
+                        <span class="badge bg-secondary float-right">{{ item.category }}</span>
+                        {% else %}
+                        <span class="badge bg-secondary float-right">미분류</span>
+                        {% endif %}
                         <a href="#"><h3>{{ item.author }}</h3></a>
                         <div class="small mb-1">SKU: BST-498</div>
                         <h1 class="display-5 fw-bolder">{{ item.title }}</h1>
