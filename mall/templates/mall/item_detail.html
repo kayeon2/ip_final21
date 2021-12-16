@@ -31,7 +31,7 @@
                         <div class="fs-5 mb-5">
                             <span class="text-decoration-line-through">{{ item.price }}</span>
                         </div>
-                        <p class="lead">{{ item.content }}</p>
+                        <p class="lead">{{ item.get_content_markdown | safe }}</p>
 
                         {% if item.tags.exists %}
                             <i class="fas fa-tags"></i>
