@@ -30,7 +30,7 @@
                                     <ul>
                                         {% for category in categories %}
                                         <li>
-                                            <a href="{{ category.get_absolute_url }}">{{ category }} ({{ category.item_set.count }})</a>
+                                            <a href="http://127.0.0.1:8000/mall/category/{{ category.slug }}">{{ category }} ({{ category.item_set.count }})</a>
                                         </li>
                                         {% endfor %}
                                         <li>

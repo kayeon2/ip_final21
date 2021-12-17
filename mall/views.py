@@ -113,7 +113,7 @@ def category_page(request, slug):
         request,
         'mall/item_list.html',
         {
-            'item_list' : Item.objects.filter(category=category),
+            'item_list' : item_list,
             'categories' : Category.objects.all(),
             'no_category_item_count' : Item.objects.filter(category=None).count(),
             'category' : category
@@ -131,7 +131,7 @@ def tag_page(request, slug):
             'item_list' : item_list,
             'tag': tag,
             'categories' : Category.objects.all(),
-            'no_category_post_count' : Item.objects.filter(category=None).count(),
+            'no_category_item_count' : Item.objects.filter(category=None).count(),
         }
     )
 

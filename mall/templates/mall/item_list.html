@@ -10,7 +10,8 @@
         {% endif %}
     {% endif %}
 
-    <h1>Shop
+    <h1>
+        Shop
         {% if category %}<span class="badge badge-secondary">{{ category }}</span>{% endif %}
         {% if tag %}<span class="badge badge-light"><i class="fas fa-tags"></i> {{ tag }} ({{ tag.item_set.count }})</span>{% endif %}
     </h1>
