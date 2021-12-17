@@ -4,6 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Item, Category, Tag
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
+from .forms import CommentForm
+from django.shortcuts import get_object_or_404
 
 class ItemList(ListView):
     model = Item
@@ -13,6 +15,7 @@ class ItemList(ListView):
         context = super(ItemList, self).get_context_data()
         context['categories'] = Category.objects.all()
         context['no_category_item_count'] = Item.objects.filter(category=None).count()
+        context['comment_form'] = CommentForm
         return context
 
 class ItemDetail(DetailView):
@@ -22,6 +25,7 @@ class ItemDetail(DetailView):
         context = super(ItemDetail, self).get_context_data()
         context['categories'] = Category.objects.all()
         context['no_category_item_count'] = Item.objects.filter(category=None).count()
+        context['comment_form'] = CommentForm
         return context
 
 class ItemCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -130,3 +134,20 @@ def tag_page(request, slug):
             'no_category_post_count' : Item.objects.filter(category=None).count(),
         }
     )
+
+def new_comment(request, pk):
+    if request.user.is_authenticated:
+        item = get_object_or_404(Item, pk=pk)
+
+        if request.method == 'POST':
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.item = item
+                comment.author = request.user
+                comment.save()
+                return redirect(comment.get_absolute_url())
+        else:
+            return redirect(item.get_absolute_url())
+    else:
+        raise PermissionDenied

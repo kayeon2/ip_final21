@@ -58,12 +58,18 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+    # modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.author}::{self.content}'
 
     def get_absolute_url(self):
-        return f'{self.post.get_absolute_url()}#comment-{self.pk}'
+        return f'{self.item.get_absolute_url()}#comment-{self.pk}'
+
+    def get_avatar_url(self):
+        if self.author.socialaccount_set.exists():
+            return self.author.socialaccount_set.first().get_avatar_url()
+        else:
+            return 'https://doitdjango.com/avatar/id/415/7e038f234f25a897/svg/{self.author.email}/'
 
 
