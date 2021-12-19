@@ -11,17 +11,21 @@
     <body>
         {% include 'mall/navbar.html' %}
 
-        <!-- Page content-->
-        <div class="container">
-            <div class="row">
-                <!-- Blog entries-->
-                <div class="col-lg-9" id="main-area">
-                    {% block main_area %}
-                    {% endblock %}
-                </div>
+        {% block main_area %}
+        {% endblock %}
 
-                <!-- Side widgets-->
-                <div class="col-lg-3">
+        <!-- Side widgets-->
+        <div class="col-lg-3">
+            <!-- Search widget-->
+            <div class="card mb-4">
+              <div class="card-header">Search</div>
+              <div class="card-body">
+                  <div class="input-group">
+                      <input class="form-control" type="text" id="search-input" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                    &nbsp;&nbsp;<button class="btn btn-primary" id="button-search" type="button" onclick="searchItem()"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            </div>
                     <!-- Categories widget-->
                     <div class="card mb-4" id="categories-card">
                         <div class="card-header">Categories</div>
@@ -44,6 +48,22 @@
             </div>
         </div>
 
+    <script>
+        function searchItem(){
+            let searchValue = document.getElementById('search-input').value.trim();
+            if(searchValue.length > 1) {
+                location.href = "/mall/search/" + searchValue + "/";
+            }
+            else {
+                alert('검색어(' + searchValue + ')가 너무 짧습니다.');
+            }
+        };
+        document.getElementById('search-input').addEventListener('keyup',
+                        function(event) {
+                            if(event.key == 'Enter') { searchItem();}
+                            }
+        )
+    </script>
         <!-- Footer-->
         {% include 'mall/footer.html' %}
 

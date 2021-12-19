@@ -1,8 +1,20 @@
 {% extends 'mall/base.html' %}
 
 {% block main_area %}
-    {% include 'mall/header.html' %}
-
+<!-- Page header with logo and tagline-->
+<header class="py-5 border-bottom mb-4" style="background-color: #e3f2fd;">
+  <div class="container">
+    <div class="text-center my-5">
+      <h1 class="fw-bolder">Welcome to SeonShine Mall</h1>
+      <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
+    </div>
+  </div>
+</header>
+        <!-- Page content-->
+        <div class="container">
+            <div class="row">
+                <!-- Blog entries-->
+                <div class="col-lg-9" id="main-area">
     {% if user.is_authenticated %}
         {% if user.is_staff or user.is_superuser %}
             <a class="btn btn-info btn-small float-right" href="/mall/create_item">
@@ -11,19 +23,21 @@
     {% endif %}
 
     <h1>
-        Shop
-        {% if category %}<span class="badge badge-secondary">{{ category }}</span>{% endif %}
-        {% if tag %}<span class="badge badge-light"><i class="fas fa-tags"></i> {{ tag }} ({{ tag.item_set.count }})</span>{% endif %}
+        <h3>Products for sale
+            {% if search_info %}<span class="badge bg-secondary">{{ search_info }}</span>{% endif %}
+            {% if category %}<span class="badge badge-secondary">{{ category }}</span>{% endif %}
+            {% if tag %}<span class="badge badge-light"><i class="fas fa-tags"></i> {{ tag }} ({{ tag.item_set.count }})</span>{% endif %}
+        </h3>
     </h1>
 
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-2 row-cols-xl-3 justify-content-center">
         {% if item_list.exists %}
             {% for i in item_list %}
-                <div class="col mb-5">
+                <div class="col mb-4">
                     <div class="card h-100" id="item-{{ i.pk }}">
                         <!-- Product image-->
                         {% if i.head_image %}
-                            <img class="card-img-top" src="{{ i.head_image.url }}" alt="{{ i }} head image" />
+                            <a href="{{ i.get_absolute_url }}"><img class="card-img-top" src="{{ i.head_image.url }}" alt="{{ i }} head image" /></a>
                         {% else %}
                             <img class="card-img-top" src="https://picsum.photos/seed/{{p.id}}/800/200" alt="random image" />
                         {% endif %}
@@ -35,13 +49,13 @@
                             <span class="badge bg-secondary float-right">미분류</span>
                             {% endif %}
 
+                            <!-- Product brand-->
+                            <a href="#">{{ i.author }}</a>
                             <div class="text-center">
-                                <!-- Product brand-->
-                                <a href="#">{{ i.author }}</a>
                                 <!-- Product name-->
-                                <h5 class="fw-bolder">{{ i.title }}</h5>
+                                <h7 class="fw-bolder">{{ i.title }}</h7>
                                 <!-- Product price-->
-                                {{ i.price }}
+                                <h5>{{ i.price }}</h5>
                             </div>
 
                             {% if i.tags.exists %}
@@ -49,14 +63,7 @@
                                 {% for tag in i.tags.all %}
                                     <a href="{{ tag.get_absolute_url }}"><span class="badge bg-light">{{ tag }}</span></a>
                                 {% endfor %}
-                                <br/><br/>
                             {% endif %}
-                        </div>
-                        <!-- Product actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <a class="btn btn-outline-dark mt-auto" href="{{ i.get_absolute_url }}">View options</a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,17 +73,27 @@
         {% endif %}
     </div>
 
-    <!-- Pagination-->
-    <nav aria-label="Pagination">
-        <hr class="my-0" />
-        <ul class="pagination justify-content-center my-4">
-            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-            <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-            <li class="page-item"><a class="page-link" href="#!">2</a></li>
-            <li class="page-item"><a class="page-link" href="#!">3</a></li>
-            <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-            <li class="page-item"><a class="page-link" href="#!">15</a></li>
-            <li class="page-item"><a class="page-link" href="#!">Older</a></li>
-        </ul>
-    </nav>
+    {% if is_paginated %}
+          <ul class="pagination justify-content-center my-4">
+              {% if page_obj.has_previous %}
+              <li class="page-item">
+                  <a class="page-link" href="?page={{page_obj.previous_page_number}}" tabindex="-1" aria-disabled="true">&larr; Newer</a>
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&larr; Newer</a>
+              </li>
+              {% endif %}
+              {% if page_obj.has_next %}
+              <li class="page-item">
+                  <a class="page-link" href="?page={{page_obj.next_page_number}}">Older &rarr;</a>
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                  <a class="page-link" href="#!">Older &rarr;</a>
+              </li>
+              {% endif %}
+          </ul>
+    {% endif %}
+                </div>
 {% endblock %}

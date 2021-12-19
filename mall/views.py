@@ -6,10 +6,12 @@ from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from .forms import CommentForm
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 class ItemList(ListView):
     model = Item
     ordering = '-pk'
+    paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ItemList, self).get_context_data()
@@ -100,6 +102,22 @@ class ItemUpdate(LoginRequiredMixin, UpdateView):
                 self.object.tags.add(tag)
 
         return response
+
+class ItemSearch(ItemList):
+    paginate_by = None
+
+    def get_queryset(self):
+        q = self.kwargs['q']
+        item_list = Item.objects.filter(
+            Q(title__contains=q) | Q(tags__name__contains=q)
+        ).distinct()
+        return item_list
+
+    def get_context_data(self, **kwargs):
+        context = super(ItemSearch, self).get_context_data()
+        q = self.kwargs['q']
+        context['search_info'] = f'Search : {q}({self.get_queryset().count()})'
+        return context
 
 def category_page(request, slug):
     if slug == 'no_category':

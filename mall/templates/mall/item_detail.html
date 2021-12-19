@@ -6,96 +6,102 @@
 {% endblock %}
 
 {% block main_area %}
-    <div id="item-area">
-    <!-- Post content-->
-        <section class="py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6">
-                        {% if item.head_image %}
-                            <img class="card-img-top mb-5 mb-md-0" src="{{ item.head_image.url }}" alt="..." />
-                        {% else %}
-                            <img class="img-fluid rounded" src="https://picsum.photos/seed/{{post.id}}/800/200" alt="random image" />
-                        {% endif %}
+    <!-- Page content-->
+    <div class="container">
+        <div class="row">
+            <!-- Blog entries-->
+            <div class="col-lg-9" id="main-area">
+            <div id="item-area">
+            <!-- Post content-->
+                <section class="py-5">
+                    <div class="container px-4 px-lg-5 my-5">
+                        <div class="row gx-4 gx-lg-5 align-items-center">
+                            <div class="col-md-6">
+                                {% if item.head_image %}
+                                    <img class="card-img-top mb-5 mb-md-0" src="{{ item.head_image.url }}" alt="..." />
+                                {% else %}
+                                    <img class="img-fluid rounded" src="https://picsum.photos/seed/{{post.id}}/800/200" alt="random image" />
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                {% if item.category %}
+                                <span class="badge bg-secondary float-right">{{ item.category }}</span>
+                                {% else %}
+                                <span class="badge bg-secondary float-right">미분류</span>
+                                {% endif %}
+
+                                <a href="#"><h3>{{ item.author }}</h3></a>
+                                <div class="small mb-1">SKU: BST-498</div>
+                                <h1 class="display-5 fw-bolder">{{ item.title }}</h1>
+                                <div class="fs-5 mb-5">
+                                    <span class="text-decoration-line-through">{{ item.price }}</span>
+                                </div>
+                                <p class="lead">{{ item.get_content_markdown | safe }}</p>
+
+                                {% if item.tags.exists %}
+                                    <i class="fas fa-tags"></i>
+                                    {% for tag in item.tags.all %}
+                                        <a href="{{ tag.get_absolute_url }}"><span class="badge bg-light">{{ tag }}</span></a>
+                                    {% endfor %}
+                                    <br/><br/>
+                                {% endif %}
+
+                                {% if user.is_authenticated and user == item.author %}
+                                    <a href="/mall/update_item/{{item.pk}}/" class="btn btn-info htn-sm float-right">
+                                        <i class="fas fa-pen"></i> Edit Item
+                                    </a>
+                                {% endif %}
+
+                                <div class="d-flex">
+                                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                                        <i class="bi-cart-fill me-1"></i>
+                                        Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </section>
+            </div>
 
-                    <div class="col-md-6">
-                        {% if item.category %}
-                        <span class="badge bg-secondary float-right">{{ item.category }}</span>
+            <!-- Comments section-->
+            <div class="mb-5" id="comment-area">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <!-- Comment form-->
+                        {% if user.is_authenticated %}
+                        <form class="mb-4" id="comment-form" method="POST" action="{{ item.get_absolute_url }}new_comment/">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ comment_form | crispy }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
                         {% else %}
-                        <span class="badge bg-secondary float-right">미분류</span>
+                        <a role="button" class="btn btn-outline-dark" href="#"
+                           data-toggle="modal" data-target="#loginModal">Log in and leave a comment</a>
                         {% endif %}
 
-                        <a href="#"><h3>{{ item.author }}</h3></a>
-                        <div class="small mb-1">SKU: BST-498</div>
-                        <h1 class="display-5 fw-bolder">{{ item.title }}</h1>
-                        <div class="fs-5 mb-5">
-                            <span class="text-decoration-line-through">{{ item.price }}</span>
+                        {% if item.comment_set.exists %}
+                        {% for comment in item.comment_set.all %}
+
+                        <!-- Single comment-->
+                        <div class="d-flex" id="comment-{{ comment.pk }}">
+                            <div class="flex-shrink-0">
+                                <img class="rounded-circle" src="{{ comment.get_avatar_url }}" alt="{{ comment.author }}" width="50px" />
+                            </div>
+                            <div class="ms-3">
+                                <div class="fw-bold">{{ comment.author.username }} &nbsp;&nbsp;&nbsp;<small class="text-muted">{{ comment.created_at }}</small>
+                                </div>
+                                <p>{{ comment.content | linebreaks }}</p>
+                            </div>
                         </div>
-                        <p class="lead">{{ item.get_content_markdown | safe }}</p>
-
-                        {% if item.tags.exists %}
-                            <i class="fas fa-tags"></i>
-                            {% for tag in item.tags.all %}
-                                <a href="{{ tag.get_absolute_url }}"><span class="badge bg-light">{{ tag }}</span></a>
-                            {% endfor %}
-                            <br/><br/>
+                        {% endfor %}
                         {% endif %}
-
-                        {% if user.is_authenticated and user == item.author %}
-                            <a href="/mall/update_item/{{item.pk}}/" class="btn btn-info htn-sm float-right">
-                                <i class="fas fa-pen"></i> Edit Item
-                            </a>
-                        {% endif %}
-
-                        <div class="d-flex">
-                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                                <i class="bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
-
-    <!-- Comments section-->
-    <div class="mb-5" id="comment-area">
-        <div class="card bg-light">
-            <div class="card-body">
-                <!-- Comment form-->
-                {% if user.is_authenticated %}
-                <form class="mb-4" id="comment-form" method="POST" action="{{ item.get_absolute_url }}new_comment/">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ comment_form | crispy }}
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-                {% else %}
-                <a role="button" class="btn btn-outline-dark" href="#"
-                   data-toggle="modal" data-target="#loginModal">Log in and leave a comment</a>
-                {% endif %}
-
-                {% if item.comment_set.exists %}
-                {% for comment in item.comment_set.all %}
-
-                <!-- Single comment-->
-                <div class="d-flex" id="comment-{{ comment.pk }}">
-                    <div class="flex-shrink-0">
-                        <img class="rounded-circle" src="{{ comment.get_avatar_url }}" alt="{{ comment.author }}" width="50px" />
-                    </div>
-                    <div class="ms-3">
-                        <div class="fw-bold">{{ comment.author.username }} &nbsp;&nbsp;&nbsp;<small class="text-muted">{{ comment.created_at }}</small>
-                        </div>
-                        <p>{{ comment.content | linebreaks }}</p>
-                    </div>
-                </div>
-                {% endfor %}
-                {% endif %}
             </div>
-        </div>
-    </div>
 {% endblock %}
