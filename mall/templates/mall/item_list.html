@@ -2,11 +2,11 @@
 
 {% block main_area %}
 <!-- Page header with logo and tagline-->
-<header class="py-5 border-bottom mb-4" style="background-color: #e3f2fd;">
+<header class="py-5 border-bottom mb-4" style="background-color: #FF6464;">
   <div class="container">
     <div class="text-center my-5">
-      <h1 class="fw-bolder">Welcome to SeonShine Mall</h1>
-      <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
+      <h1 class="fw-bolder text-white">SEONSHINE MALL</h1>
+      <p class="lead mb-0 text-white">One step for your skin</p>
     </div>
   </div>
 </header>
@@ -23,7 +23,7 @@
     {% endif %}
 
     <h1>
-        <h3>Products for sale
+        <h3>Items for sale
             {% if search_info %}<span class="badge bg-secondary">{{ search_info }}</span>{% endif %}
             {% if category %}<span class="badge badge-secondary">{{ category }}</span>{% endif %}
             {% if tag %}<span class="badge badge-light"><i class="fas fa-tags"></i> {{ tag }} ({{ tag.item_set.count }})</span>{% endif %}
@@ -44,7 +44,7 @@
                         <!-- Product details-->
                         <div class="card-body p-4">
                             {% if i.category %}
-                            <span class="badge bg-secondary float-right">{{ i.category }}</span>
+                            <span class="badge float-right" style="background-color: #FFDAD7;">{{ i.category }}</span>
                             {% else %}
                             <span class="badge bg-secondary float-right">미분류</span>
                             {% endif %}
